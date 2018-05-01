@@ -5,15 +5,13 @@ import App from './App'
 import router from './router'
 import firebase from 'firebase'
 import { store } from './store'
+import fbConfig from '../fbConfig'
 
 Vue.config.productionTip = false
 let app;
 
 // Initialize Firebase
-let config = {
-  // INSERT FIREBASE CREDENTIALS HERE //
-};
-
+let config = fbConfig
 
 firebase.initializeApp(config);
 firebase.auth().onAuthStateChanged(function (user) {

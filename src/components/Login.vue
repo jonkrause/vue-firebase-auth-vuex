@@ -5,6 +5,7 @@
     <input type="password" placeholder="Password" v-model="password"><br>
     <button @click="login">Log In</button>
     <p>Don't have an account? <router-link to="/signup">Sign Up</router-link></p>
+    <button @click="fbLogin">Facebook</button>
   </div>
 </template>
 
@@ -20,9 +21,13 @@ export default {
   },
   methods: {
     login: function() {
-      firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(this.email, this.password)
+        .then(
           user => {
             alert('Signed in as ' + this.email)
+            this.$store.dispatch('signIn', this.email)
             this.$router.replace('home')
           },
           err => {
@@ -30,6 +35,28 @@ export default {
           }
         )
       this.$router.replace('home')
+    },
+    fbLogin: function() {
+      var provider = new firebase.auth.FacebookAuthProvider()
+      provider.addScope('user_location')
+      provider.addScope('user_hometown')
+      firebase
+        .auth()
+        .signInWithPopup(provider)
+        .then(result => {
+          var token = result.credential.accessToken
+          var user = result.user
+          console.log(user)
+          this.$store.dispatch('getFbId', user.providerData[0].uid)
+          this.$store.dispatch('signIn', user.email)
+          this.$router.replace('home')
+        })
+        .catch(err => {
+          console.log(err.code)
+          console.log(err.message)
+          console.log(err.email)
+          console.log(err.credential)
+        })
     }
   }
 }

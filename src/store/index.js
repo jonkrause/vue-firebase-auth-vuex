@@ -7,11 +7,16 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
   state: {
     currentUser: null,
+    fbUserId: null
   },
   mutations: {
     currentUser(state, payload) {
       state.currentUser = payload
       console.log('currentUser: ' + payload)
+    },
+    fbUserId(state, payload) {
+      state.fbUserId = payload
+      console.log('fbUserId: ' + payload)
     }
   },
   actions: {
@@ -34,11 +39,24 @@ export const store = new Vuex.Store({
         .catch((err) => {
           console.log(err)
         })
+    },
+    signIn({
+      commit
+    }, payload) {
+      commit('currentUser', payload)
+    },
+    getFbId({
+      commit
+    }, payload) {
+      commit('fbUserId', payload)
     }
   },
   getters: {
     currentUser(state) {
       return state.currentUser
+    },
+    fbUserId(state) {
+      return state.fbUserId
     }
   }
 })
