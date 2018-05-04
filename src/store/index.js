@@ -17,6 +17,10 @@ export const store = new Vuex.Store({
     fbUserId(state, payload) {
       state.fbUserId = payload
       console.log('fbUserId: ' + payload)
+    },
+    logout(state, payload) {
+      state.currentUser = null
+      console.log('currentUser: ' + state.currentUser)
     }
   },
   actions: {
@@ -45,6 +49,9 @@ export const store = new Vuex.Store({
     }, payload) {
       commit('currentUser', payload)
     },
+    logout({commit}, payload) {
+      commit('currentUser', null)
+    },
     getFbId({
       commit
     }, payload) {
@@ -57,6 +64,9 @@ export const store = new Vuex.Store({
     },
     fbUserId(state) {
       return state.fbUserId
+    },
+    logout(state) {
+      return state.currentUser
     }
   }
 })

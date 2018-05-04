@@ -4,7 +4,7 @@ import Router from 'vue-router'
 import Home from '@/components/Home'
 import SignUp from '@/components/SignUp'
 import Login from '@/components/Login'
-import Survey from '@/components/Survey'
+// import Survey from '@/components/Survey'
 import firebase from 'firebase'
 
 Vue.use(Router)

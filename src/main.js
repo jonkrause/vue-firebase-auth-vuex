@@ -16,7 +16,6 @@ let config = fbConfig
 firebase.initializeApp(config);
 firebase.auth().onAuthStateChanged(function (user) {
   if (!app) {
-
     app = new Vue({
       el: '#app',
       template: '<App/>',
