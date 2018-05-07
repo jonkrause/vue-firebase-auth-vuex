@@ -7,20 +7,13 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
   state: {
     currentUser: null,
-    fbUserId: null
   },
   mutations: {
     currentUser(state, payload) {
       state.currentUser = payload
-      // console.log('currentUser: ' + payload)
-    },
-    fbUserId(state, payload) {
-      state.fbUserId = payload
-      // console.log('fbUserId: ' + payload)
     },
     logout(state, payload) {
       state.currentUser = null
-      // console.log('currentUser: ' + state.currentUser)
     }
   },
   actions: {
@@ -31,8 +24,10 @@ export const store = new Vuex.Store({
         .then(user => {
           const newUser = {
             id: user.uid,
-            email: payload.email
-
+            email: payload.email,
+            facebookID: null,
+            displayName: null,
+            photoURL: null
           }
           firebase.database().ref('users/' + user.uid).push(newUser).then(data => {
               commit('currentUser', newUser)
@@ -62,7 +57,6 @@ export const store = new Vuex.Store({
     }, payload) {
       console.log(firebase.auth().currentUser)
       let fbUser = firebase.auth().currentUser.providerData[0]
-
       if (fbUser.uid.indexOf('@') > -1) {
         console.log('no facebook id')
         if (firebase.auth().currentUser.email) {
@@ -86,28 +80,11 @@ export const store = new Vuex.Store({
           })
         }
       }
-
-
-
-      // if (firebase.auth().currentUser.email) {
-      //   commit('currentUser', {
-      //     email: firebase.auth().currentUser.email,
-      //     id: firebase.auth().currentUser.uid,
-      //     facebookID: fbUser.uid,
-      //     displayName: fbUser.displayName,
-      //     photoURL: fbUser.photoURL
-      //   })
-      // }
     },
     logout({
       commit
     }, payload) {
       commit('currentUser', null)
-    },
-    getFbId({
-      commit
-    }, payload) {
-      commit('fbUserId', payload)
     }
   },
   getters: {

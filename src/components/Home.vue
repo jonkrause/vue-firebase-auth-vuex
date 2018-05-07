@@ -9,7 +9,6 @@
 
 <script>
 import firebase from 'firebase'
-
 export default {
   name: 'home',
   data() {
@@ -20,15 +19,17 @@ export default {
   },
   created: function() {
     console.log('created')
-    return this.currentUser = this.$store.getters.currentUser
+    return (this.currentUser = this.$store.getters.currentUser)
   },
-  computed: {
-  },
+  computed: {},
   methods: {
     logout: function() {
-      firebase.auth().signOut().then(() => {
-        this.$store.dispatch('logout')
-        this.$router.replace('login')
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          this.$store.dispatch('logout')
+          this.$router.replace('login')
         })
     }
   }

@@ -10,7 +10,7 @@ export default {
   name: 'App',
   data() {
     return {
-      msg: "ok cool",
+      msg: 'ok cool',
       userEmail: null
     }
   },
@@ -20,7 +20,6 @@ export default {
     } else {
       this.userEmail = null
     }
-
   }
 }
 </script>
