@@ -44,10 +44,14 @@ export const store = new Vuex.Store({
           console.log(err)
         })
     },
-    signIn({
-      commit
-    }, payload) {
+    signIn({commit}, payload) {
+      console.log(payload)
+        commit('currentUser', payload)
+        console.log(firebase.auth().currentUser)
+    },
+    setUser({commit}, payload) {
       commit('currentUser', payload)
+      console.log('setuser')
     },
     logout({commit}, payload) {
       commit('currentUser', null)

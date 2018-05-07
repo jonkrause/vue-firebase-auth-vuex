@@ -15,6 +15,9 @@ export default {
       msg: 'this is a cool thing'
     }
   },
+  computed: {
+
+  },
   methods: {
     logout: function() {
       firebase.auth().signOut().then(() => {

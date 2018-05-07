@@ -26,8 +26,8 @@ export default {
         .signInWithEmailAndPassword(this.email, this.password)
         .then(
           user => {
-            alert('Signed in as ' + this.email)
             this.$store.dispatch('signIn', this.email)
+            alert('Signed in as ' + this.email)
             this.$router.replace('home')
           },
           err => {
