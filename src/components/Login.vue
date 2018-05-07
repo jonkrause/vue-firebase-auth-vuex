@@ -26,7 +26,7 @@ export default {
         .signInWithEmailAndPassword(this.email, this.password)
         .then(
           user => {
-            this.$store.dispatch('signIn', this.email)
+            this.$store.dispatch('signIn', { email: this.email })
             alert('Signed in as ' + this.email)
             this.$router.replace('home')
           },
@@ -47,8 +47,14 @@ export default {
           var token = result.credential.accessToken
           var user = result.user
           console.log(user)
-          this.$store.dispatch('getFbId', user.providerData[0].uid)
-          this.$store.dispatch('signIn', user.email)
+          // this.$store.dispatch('getFbId', user.providerData[0].uid)
+          this.$store.dispatch('signIn', {
+            email: user.email,
+            id: firebase.auth().currentUser.uid,
+            facebookID: user.providerData[0].uid,
+            photoURL: user.providerData[0].photoURL,
+            displayName: user.providerData[0].displayName
+          })
           this.$router.replace('home')
         })
         .catch(err => {

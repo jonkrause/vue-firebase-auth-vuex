@@ -1,6 +1,8 @@
 <template>
   <div class="home">
-    {{msg}}<br>
+    <img class="profilePhoto" :src="currentUser.photoURL"><br>
+    {{currentUser.displayName}}<br>
+    <p>{{msg}}</p>
     <button @click="logout">Logout</button>
   </div>
 </template>
@@ -12,10 +14,20 @@ export default {
   name: 'home',
   data() {
     return {
-      msg: 'this is a cool thing'
+      msg: 'this is a cool thing',
+      currentUser: null
     }
   },
+  created: function() {
+    console.log('created')
+    return this.currentUser = this.$store.getters.currentUser
+  },
   computed: {
+    getUser() {
+      return this.currentUser = this.$store.getters('currentUser')
+      
+    }
+
 
   },
   methods: {
@@ -45,5 +57,8 @@ li {
 }
 a {
   color: #42b983;
+}
+.profilePhoto {
+  border-radius: 50%;
 }
 </style>

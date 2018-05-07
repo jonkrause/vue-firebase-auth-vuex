@@ -30,8 +30,9 @@ export const store = new Vuex.Store({
       firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
         .then(user => {
           const newUser = {
-            user_id: user.uid,
+            id: user.uid,
             email: payload.email
+
           }
           firebase.database().ref('users/' + user.uid).push(newUser).then(data => {
               commit('currentUser', newUser)
@@ -44,16 +45,35 @@ export const store = new Vuex.Store({
           console.log(err)
         })
     },
-    signIn({commit}, payload) {
-        commit('currentUser', payload)
-        console.log(firebase.auth().currentUser)
+    signIn({
+      commit
+    }, payload) {
+      commit('currentUser', {
+        email: payload.email,
+        id: firebase.auth().currentUser.uid,
+        facebookID: payload.facebookID,
+        displayName: payload.displayName,
+        photoURL: payload.photoURL
+      })
+      console.log(firebase.auth().currentUser)
     },
-    setUser({commit}, payload) {
+    setUser({
+      commit
+    }, payload) {
+      let fbUser = firebase.auth().currentUser.providerData[0]
       if (firebase.auth().currentUser.email) {
-        commit('currentUser', firebase.auth().currentUser.email)
+        commit('currentUser', {
+          email: firebase.auth().currentUser.email,
+          id: firebase.auth().currentUser.uid,
+          facebookID: fbUser.uid,
+          displayName: fbUser.displayName,
+          photoURL: fbUser.photoURL
+        })
       }
     },
-    logout({commit}, payload) {
+    logout({
+      commit
+    }, payload) {
       commit('currentUser', null)
     },
     getFbId({
