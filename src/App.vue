@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    {{userEmail}}
     <router-view/>
   </div>
 </template>
@@ -12,12 +11,11 @@ export default {
   data() {
     return {
       msg: "ok cool",
-      userEmail: firebase.auth().currentUser.email
+      userEmail: null
     }
   },
   created: function() {
-    console.log(this.userEmail)
-    if (!firebase.auth().currentUser) {
+    if (firebase.auth().currentUser) {
       this.$store.dispatch('setUser', this.userEmail)
     } else {
       this.userEmail = null

@@ -12,15 +12,15 @@ export const store = new Vuex.Store({
   mutations: {
     currentUser(state, payload) {
       state.currentUser = payload
-      console.log('currentUser: ' + payload)
+      // console.log('currentUser: ' + payload)
     },
     fbUserId(state, payload) {
       state.fbUserId = payload
-      console.log('fbUserId: ' + payload)
+      // console.log('fbUserId: ' + payload)
     },
     logout(state, payload) {
       state.currentUser = null
-      console.log('currentUser: ' + state.currentUser)
+      // console.log('currentUser: ' + state.currentUser)
     }
   },
   actions: {
@@ -45,13 +45,13 @@ export const store = new Vuex.Store({
         })
     },
     signIn({commit}, payload) {
-      console.log(payload)
         commit('currentUser', payload)
         console.log(firebase.auth().currentUser)
     },
     setUser({commit}, payload) {
-      commit('currentUser', payload)
-      console.log('setuser')
+      if (firebase.auth().currentUser.email) {
+        commit('currentUser', firebase.auth().currentUser.email)
+      }
     },
     logout({commit}, payload) {
       commit('currentUser', null)
