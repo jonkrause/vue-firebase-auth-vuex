@@ -60,16 +60,44 @@ export const store = new Vuex.Store({
     setUser({
       commit
     }, payload) {
+      console.log(firebase.auth().currentUser)
       let fbUser = firebase.auth().currentUser.providerData[0]
-      if (firebase.auth().currentUser.email) {
-        commit('currentUser', {
-          email: firebase.auth().currentUser.email,
-          id: firebase.auth().currentUser.uid,
-          facebookID: fbUser.uid,
-          displayName: fbUser.displayName,
-          photoURL: fbUser.photoURL
-        })
+
+      if (fbUser.uid.indexOf('@') > -1) {
+        console.log('no facebook id')
+        if (firebase.auth().currentUser.email) {
+          commit('currentUser', {
+            email: firebase.auth().currentUser.email,
+            id: firebase.auth().currentUser.uid,
+            facebookID: null,
+            displayName: fbUser.displayName,
+            photoURL: fbUser.photoURL
+          })
+        }
+      } else {
+        console.log(fbUser.uid)
+        if (firebase.auth().currentUser.email) {
+          commit('currentUser', {
+            email: firebase.auth().currentUser.email,
+            id: firebase.auth().currentUser.uid,
+            facebookID: fbUser.uid,
+            displayName: fbUser.displayName,
+            photoURL: fbUser.photoURL
+          })
+        }
       }
+
+
+
+      // if (firebase.auth().currentUser.email) {
+      //   commit('currentUser', {
+      //     email: firebase.auth().currentUser.email,
+      //     id: firebase.auth().currentUser.uid,
+      //     facebookID: fbUser.uid,
+      //     displayName: fbUser.displayName,
+      //     photoURL: fbUser.photoURL
+      //   })
+      // }
     },
     logout({
       commit

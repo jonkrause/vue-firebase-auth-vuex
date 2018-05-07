@@ -27,6 +27,7 @@ export default {
         .then(
           user => {
             this.$store.dispatch('signIn', { email: this.email })
+            this.$store.dispatch('setUser')
             alert('Signed in as ' + this.email)
             this.$router.replace('home')
           },
@@ -55,6 +56,7 @@ export default {
             photoURL: user.providerData[0].photoURL,
             displayName: user.providerData[0].displayName
           })
+          this.$store.dispatch('setUser')
           this.$router.replace('home')
         })
         .catch(err => {

@@ -23,12 +23,6 @@ export default {
     return this.currentUser = this.$store.getters.currentUser
   },
   computed: {
-    getUser() {
-      return this.currentUser = this.$store.getters('currentUser')
-      
-    }
-
-
   },
   methods: {
     logout: function() {
