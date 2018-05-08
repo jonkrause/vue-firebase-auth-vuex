@@ -6,11 +6,12 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
   state: {
-    currentUser: null,
+    currentUser: null
   },
   mutations: {
     currentUser(state, payload) {
       state.currentUser = payload
+      // console.log('mutation: ', payload)
     },
     logout(state, payload) {
       state.currentUser = null
@@ -40,45 +41,49 @@ export const store = new Vuex.Store({
           console.log(err)
         })
     },
-    signIn({
-      commit
-    }, payload) {
+    signIn({commit}, payload) {
+      firebase.database().ref('users/' + payload.id).set({
+        email: payload.email,
+        id: firebase.auth().currentUser.uid,
+        facebookID: payload.facebookID,
+        displayName: payload.displayName,
+        photoURL: payload.photoURL,
+        birthday: payload.birthday
+      }).then((data) => {
+        console.log('pushed')
+      })
+
       commit('currentUser', {
         email: payload.email,
         id: firebase.auth().currentUser.uid,
         facebookID: payload.facebookID,
         displayName: payload.displayName,
-        photoURL: payload.photoURL
+        photoURL: payload.photoURL,
+        birthday: payload.birthday
       })
+
+
       console.log(firebase.auth().currentUser)
     },
-    setUser({
-      commit
-    }, payload) {
-      console.log(firebase.auth().currentUser)
+    setUser({commit}, payload) {
+
+      // console.log(firebase.auth().currentUser)
       let fbUser = firebase.auth().currentUser.providerData[0]
+
       if (fbUser.uid.indexOf('@') > -1) {
         console.log('no facebook id')
-        if (firebase.auth().currentUser.email) {
-          commit('currentUser', {
-            email: firebase.auth().currentUser.email,
-            id: firebase.auth().currentUser.uid,
-            facebookID: null,
-            displayName: fbUser.displayName,
-            photoURL: fbUser.photoURL
-          })
-        }
+        commit('currentUser', {
+          email: firebase.auth().currentUser.email,
+          id: firebase.auth().currentUser.uid
+        })
       } else {
-        console.log(fbUser.uid)
-        if (firebase.auth().currentUser.email) {
-          commit('currentUser', {
-            email: firebase.auth().currentUser.email,
-            id: firebase.auth().currentUser.uid,
-            facebookID: fbUser.uid,
-            displayName: fbUser.displayName,
-            photoURL: fbUser.photoURL
-          })
-        }
+        // console.log(fbUser.uid)
+        let userID = firebase.auth().currentUser.uid
+        let userData = firebase.database().ref('users/' + userID)
+        userData.on('value', (snapshot) => {
+          // console.log(snapshot.val())
+          commit('currentUser', snapshot.val())
+        })
       }
     },
     logout({

@@ -1,9 +1,16 @@
 <template>
   <div class="home">
-    <img class="profilePhoto" :src="currentUser.photoURL"><br>
+
+    <!-- <img class="profilePhoto" :src="currentUser.photoURL"><br>
     {{currentUser.displayName}}<br>
-    <p>{{msg}}</p>
+    <p>{{msg}}</p>{{currentUser}} -->
+
+    <!-- <img class="profilePhoto" :src="currentUser.photoURL"><br>
+    {{currentUser.displayName}}<br>
+    <p>{{msg}}</p>{{currentUser}} -->
+    {{msg}}<br>
     <button @click="logout">Logout</button>
+    <button @click="update">Update</button>
   </div>
 </template>
 
@@ -14,14 +21,10 @@ export default {
   data() {
     return {
       msg: 'this is a cool thing',
-      currentUser: null
+      currentUser: null,
+      error: null
     }
   },
-  created: function() {
-    console.log('created')
-    return (this.currentUser = this.$store.getters.currentUser)
-  },
-  computed: {},
   methods: {
     logout: function() {
       firebase
@@ -31,6 +34,9 @@ export default {
           this.$store.dispatch('logout')
           this.$router.replace('login')
         })
+    },
+    update() {
+      this.msg = this.$store.getters.currentUser
     }
   }
 }

@@ -11,6 +11,7 @@
 
 <script>
 import firebase from 'firebase'
+import axios from 'axios'
 export default {
   name: 'login',
   data() {
@@ -21,11 +22,7 @@ export default {
   },
   methods: {
     login: function() {
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(this.email, this.password)
-        .then(
-          user => {
+      firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(user => {
             this.$store.dispatch('signIn', { email: this.email }).then(() => {
               this.$store.dispatch('setUser')
               alert('Signed in as ' + this.email)
@@ -42,26 +39,51 @@ export default {
       var provider = new firebase.auth.FacebookAuthProvider()
       provider.addScope('user_location')
       provider.addScope('user_hometown')
-      firebase
-        .auth()
-        .signInWithPopup(provider)
-        .then(result => {
+      provider.addScope('user_birthday')
+      firebase.auth().signInWithPopup(provider).then(result => {
           var token = result.credential.accessToken
           var user = result.user
+          console.log('token: ' + token)
           console.log(user)
-          // this.$store.dispatch('getFbId', user.providerData[0].uid)
+
+          let userBirthday = ''
+          axios.get('https://graph.facebook.com/v2.11/' + user.providerData[0].uid + '?fields=id,name,about,birthday &access_token=' + token)
+            .then(function (response) {
+              userBirthday = response.data.birthday
+            }).then(() => {
           this.$store
             .dispatch('signIn', {
               email: user.email,
               id: firebase.auth().currentUser.uid,
               facebookID: user.providerData[0].uid,
               photoURL: user.providerData[0].photoURL,
-              displayName: user.providerData[0].displayName
+              displayName: user.providerData[0].displayName,
+              birthday: userBirthday
             })
-            .then(() => {
-              this.$store.dispatch('setUser')
-            })
+            // .then(() => {
+            //   // this.$store.dispatch('setUser')
+            // })
           this.$router.replace('home')
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+
+
+
+          // this.$store
+          //   .dispatch('signIn', {
+          //     email: user.email,
+          //     id: firebase.auth().currentUser.uid,
+          //     facebookID: user.providerData[0].uid,
+          //     photoURL: user.providerData[0].photoURL,
+          //     displayName: user.providerData[0].displayName,
+          //     birthday: person
+          //   })
+          //   .then(() => {
+          //     this.$store.dispatch('setUser')
+          //   })
+          // this.$router.replace('home')
         })
         .catch(err => {
           console.log(err.code)
