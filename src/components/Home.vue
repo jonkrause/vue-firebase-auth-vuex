@@ -25,6 +25,9 @@ export default {
       error: null
     }
   },
+  beforeCreate() {
+    return this.msg = this.$store.getters.currentUser
+  },
   methods: {
     logout: function() {
       firebase

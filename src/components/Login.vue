@@ -41,49 +41,14 @@ export default {
       provider.addScope('user_hometown')
       provider.addScope('user_birthday')
       firebase.auth().signInWithPopup(provider).then(result => {
+        console.log("result: ", result.user.providerData[0])
           var token = result.credential.accessToken
           var user = result.user
           console.log('token: ' + token)
           console.log(user)
 
-          let userBirthday = ''
-          axios.get('https://graph.facebook.com/v2.11/' + user.providerData[0].uid + '?fields=id,name,about,birthday&access_token=' + token)
-            .then(function (response) {
-              userBirthday = response.data.birthday
-            }).then(() => {
-          this.$store
-            .dispatch('signIn', {
-              email: user.email,
-              id: firebase.auth().currentUser.uid,
-              facebookID: user.providerData[0].uid,
-              photoURL: user.providerData[0].photoURL,
-              displayName: user.providerData[0].displayName,
-              birthday: userBirthday
-            })
-            // .then(() => {
-            //   // this.$store.dispatch('setUser')
-            // })
+          this.$store.dispatch('getFbData', {token: token, user: user})
           this.$router.replace('home')
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
-
-
-
-          // this.$store
-          //   .dispatch('signIn', {
-          //     email: user.email,
-          //     id: firebase.auth().currentUser.uid,
-          //     facebookID: user.providerData[0].uid,
-          //     photoURL: user.providerData[0].photoURL,
-          //     displayName: user.providerData[0].displayName,
-          //     birthday: person
-          //   })
-          //   .then(() => {
-          //     this.$store.dispatch('setUser')
-          //   })
-          // this.$router.replace('home')
         })
         .catch(err => {
           console.log(err.code)
