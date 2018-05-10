@@ -24,7 +24,7 @@ export default {
     login: function() {
       firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(user => {
             this.$store.dispatch('signIn', { email: this.email }).then(() => {
-              this.$store.dispatch('setUser')
+              // this.$store.dispatch('setUser')
               alert('Signed in as ' + this.email)
             })
             this.$router.replace('home')
@@ -47,7 +47,7 @@ export default {
           console.log(user)
 
           let userBirthday = ''
-          axios.get('https://graph.facebook.com/v2.11/' + user.providerData[0].uid + '?fields=id,name,about,birthday &access_token=' + token)
+          axios.get('https://graph.facebook.com/v2.11/' + user.providerData[0].uid + '?fields=id,name,about,birthday&access_token=' + token)
             .then(function (response) {
               userBirthday = response.data.birthday
             }).then(() => {

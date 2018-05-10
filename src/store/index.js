@@ -42,16 +42,27 @@ export const store = new Vuex.Store({
         })
     },
     signIn({commit}, payload) {
-      firebase.database().ref('users/' + payload.id).set({
-        email: payload.email,
-        id: firebase.auth().currentUser.uid,
-        facebookID: payload.facebookID,
-        displayName: payload.displayName,
-        photoURL: payload.photoURL,
-        birthday: payload.birthday
-      }).then((data) => {
-        console.log('pushed')
-      })
+      if (!payload.facebookID) {
+        console.log("payload: ", payload)
+        firebase.database().ref('users/' + firebase.auth().currentUser.uid).set({
+          email: payload.email,
+          id: firebase.auth().currentUser.uid,
+        }).then((data) => {
+          console.log('pushed')
+        })
+      } else {
+        firebase.database().ref('users/' + firebase.auth().currentUser.uid).set({
+          email: payload.email,
+          id: firebase.auth().currentUser.uid,
+          facebookID: payload.facebookID,
+          displayName: payload.displayName,
+          photoURL: payload.photoURL,
+          birthday: payload.birthday
+        }).then((data) => {
+          console.log('pushed')
+        })
+      }
+
 
       commit('currentUser', {
         email: payload.email,
@@ -69,7 +80,6 @@ export const store = new Vuex.Store({
 
       // console.log(firebase.auth().currentUser)
       let fbUser = firebase.auth().currentUser.providerData[0]
-
       if (fbUser.uid.indexOf('@') > -1) {
         console.log('no facebook id')
         commit('currentUser', {
