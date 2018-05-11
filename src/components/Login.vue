@@ -48,6 +48,8 @@ export default {
           console.log(user)
 
           this.$store.dispatch('getFbData', {token: token, user: user})
+
+        }).then(() => {
           this.$router.replace('home')
         })
         .catch(err => {

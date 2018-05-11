@@ -8,7 +8,21 @@
     <!-- <img class="profilePhoto" :src="currentUser.photoURL"><br>
     {{currentUser.displayName}}<br>
     <p>{{msg}}</p>{{currentUser}} -->
-    {{msg}}<br>
+    <!-- {{msg}}<br>
+      {{currentUser}} -->
+
+    <div v-if="!currentUser">
+      loading...
+    </div>
+    <div v-else>
+      <img class="profilePhoto" :src="currentUser.photoURL">
+      <p>
+        {{currentUser.displayName}}<br>
+        {{currentUser.email}}<br>
+        {{currentUser.birthday}}
+
+      </p>
+    </div>
     <button @click="logout">Logout</button>
     <button @click="update">Update</button>
   </div>
@@ -25,8 +39,8 @@ export default {
       error: null
     }
   },
-  beforeCreate() {
-    return this.msg = this.$store.getters.currentUser
+  created() {
+    this.update()
   },
   methods: {
     logout: function() {
@@ -39,7 +53,10 @@ export default {
         })
     },
     update() {
-      this.msg = this.$store.getters.currentUser
+      setTimeout(() => {
+        this.currentUser = this.$store.getters.currentUser
+
+      }, 1000)
     }
   }
 }
