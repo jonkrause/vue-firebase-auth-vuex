@@ -5,7 +5,6 @@
     <input type="password" placeholder="Password" v-model="password"><br>
     <button @click="login">Log In</button>
     <p>Don't have an account? <router-link to="/signup">Sign Up</router-link></p>
-    <button @click="fbLogin">Facebook</button>
   </div>
 </template>
 
@@ -22,7 +21,11 @@ export default {
   },
   methods: {
     login: function() {
-      firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(user => {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(this.email, this.password)
+        .then(
+          user => {
             this.$store.dispatch('signIn', { email: this.email }).then(() => {
               // this.$store.dispatch('setUser')
               alert('Signed in as ' + this.email)
@@ -34,30 +37,6 @@ export default {
           }
         )
       this.$router.replace('home')
-    },
-    fbLogin: function() {
-      var provider = new firebase.auth.FacebookAuthProvider()
-      provider.addScope('user_location')
-      provider.addScope('user_hometown')
-      provider.addScope('user_birthday')
-      firebase.auth().signInWithPopup(provider).then(result => {
-        console.log("result: ", result.user.providerData[0])
-          var token = result.credential.accessToken
-          var user = result.user
-          console.log('token: ' + token)
-          console.log(user)
-
-          this.$store.dispatch('getFbData', {token: token, user: user})
-
-        }).then(() => {
-          this.$router.replace('home')
-        })
-        .catch(err => {
-          console.log(err.code)
-          console.log(err.message)
-          console.log(err.email)
-          console.log(err.credential)
-        })
     }
   }
 }

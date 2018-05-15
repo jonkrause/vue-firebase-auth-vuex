@@ -1,7 +1,7 @@
 {
-  "name": "004webpack",
+  "name": "authtemp",
   "version": "1.0.0",
-  "description": "Resume builder with VueJs",
+  "description": "authTemplate",
   "author": "jonkrause <jonathonkrause@gmail.com>",
   "private": true,
   "scripts": {

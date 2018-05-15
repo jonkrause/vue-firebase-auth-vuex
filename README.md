@@ -1,6 +1,6 @@
 # vue/firebase auth template
 
-> User authentication boilerplate with firebase, vuejs, vuex and facebook login
+> Very basic user authentication with Vuejs and Firebase.
 
 ## Build Setup
 
@@ -9,7 +9,9 @@
 npm install
 
 #create fbConfig.json
+create fbConfig.json in root folder of project.
 insert firebase credentials to fbConfig.json
+note: this method is just a quick way to get up and running. seek a better way.
 
 # serve with hot reload at localhost:8080
 npm run dev

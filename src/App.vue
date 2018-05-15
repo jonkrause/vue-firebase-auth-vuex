@@ -10,8 +10,8 @@ export default {
   name: 'App',
   data() {
     return {
-      msg: 'ok cool',
-      userEmail: null
+      userEmail: null,
+      title: 'whatever'
     }
   },
   created: function() {

@@ -1,6 +1,7 @@
 <template>
   <div class="signup">
     <h3>Sign Up</h3>
+    <input type="text" placeholder="Username" v-model="username"><br>
     <input type="text" placeholder="Email" v-model="email"><br>
     <input type="password" placeholder="Password" v-model="password"><br>
     <button @click="signUp">Sign Up</button>
@@ -15,7 +16,8 @@ export default {
   data() {
     return {
       email: '',
-      password: ''
+      password: '',
+      username: ''
     }
   },
   computed: {
@@ -34,7 +36,8 @@ export default {
     signUp() {
       this.$store.dispatch('signUserUp', {
         email: this.email,
-        password: this.password
+        password: this.password,
+        username: this.username
       })
     }
   }
